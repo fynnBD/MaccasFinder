@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
          model = MaccasController(this)
         val location = model.startLocationTracking()
-        println("EAT ASS")
         location.observe(this){location -> updateCompassPosition(location as Location)}
         model.target.observe(this){target -> updateCompassTarget(target as Result)}
 
@@ -53,7 +52,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun startCompass(location: Location, target : Result) {
-        println("AH SHIT FUCk")
         compass = CompassFragment(location, target, "test")
         var ft = supportFragmentManager.beginTransaction()
         ft.add(R.id.frame, compass!!).commit()

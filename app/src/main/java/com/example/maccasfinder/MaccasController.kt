@@ -59,7 +59,7 @@ class MaccasController(val context: Context) : ViewModel() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            println("mega fail")
+
             ActivityCompat.requestPermissions(context as MainActivity, arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 22)
         }
         mFusedLocationClient.requestLocationUpdates(locationRequest,
@@ -102,7 +102,6 @@ class MaccasController(val context: Context) : ViewModel() {
                 if(i.name.contains("McDonald's"))
                 {
                     this.target.value = i
-                    println(i.name)
                     return
                 }
                 Toast.makeText(context, "No Maccas found nearby :(", Toast.LENGTH_LONG)
