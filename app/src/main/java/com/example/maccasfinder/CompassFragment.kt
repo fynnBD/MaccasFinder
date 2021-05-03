@@ -13,9 +13,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.model.LatLng
 
-class CompassFragment(var location: Location, var target: LatLng) : Fragment(), SensorEventListener {
+class CompassFragment(var location: Location, var target: Result, var name: String) : Fragment(), SensorEventListener {
     lateinit var viewHolder : View
 
     private lateinit var sensorManager: SensorManager
@@ -32,7 +31,7 @@ class CompassFragment(var location: Location, var target: LatLng) : Fragment(), 
         location = newLocation
     }
 
-    fun changeTarget(newTarget: LatLng)
+    fun changeTarget(newTarget: Result)
     {
         target = newTarget
     }
@@ -90,8 +89,7 @@ class CompassFragment(var location: Location, var target: LatLng) : Fragment(), 
                 SensorManager.getOrientation(P, orientation)
                 // Log.d(TAG, "azimuth (rad): " + azimuth);
                 var azimuth = Math.toDegrees(orientation[0].toDouble()).toFloat() // orientation
-                println(azimuth)
-                var angle =  angleFromCoordinate(location.latitude, location.longitude, target.latitude, target.longitude)
+                var angle =  angleFromCoordinate(location.latitude, location.longitude, target.geometry.location.lat, target.geometry.location.lng)
 
                 rotateArrow(azimuth, angle)
                 updateDist()
@@ -114,11 +112,13 @@ class CompassFragment(var location: Location, var target: LatLng) : Fragment(), 
     private fun rotateArrow(azimuth: Float, angle: Double) {
         var arrow = viewHolder.findViewById<ImageView>(R.id.arrow)
         arrow.rotation = (-azimuth-angle).toFloat()
+
+        viewHolder.findViewById<TextView>(R.id.name).text = target.name
     }
 
     private fun updateDist() {
         var dist = viewHolder.findViewById<TextView>(R.id.meters)
-        dist.text = "About " + distance(location.latitude, location.longitude, target.latitude, target.longitude).toInt().toString() + "m"
+        dist.text = "About " + distance(location.latitude, location.longitude, target.geometry.location.lat, target.geometry.location.lng).toInt().toString() + "m"
     }
 
     fun distance(lat_a: Double, lng_a: Double, lat_b: Double, lng_b: Double): Float {
